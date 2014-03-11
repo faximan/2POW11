@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>67A36FF7-37B4-4AC1-B247-4F7E49313FDF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>2POW11</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9F9B68CA-E29E-488A-90B9-B11A7C800EAD</key>
+		<string>https://github.com/faximan/2POW11.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>2POW11/2POW11.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9F9B68CA-E29E-488A-90B9-B11A7C800EAD</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/faximan/2POW11.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9F9B68CA-E29E-488A-90B9-B11A7C800EAD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9F9B68CA-E29E-488A-90B9-B11A7C800EAD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>2POW11</string>
+		</dict>
+	</array>
+</dict>
+</plist>
