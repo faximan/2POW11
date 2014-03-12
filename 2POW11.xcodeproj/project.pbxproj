@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE005BDB18D0ED050057C6A9 /* POWTile.m in Sources */ = {isa = PBXBuildFile; fileRef = DE005BDA18D0ED050057C6A9 /* POWTile.m */; };
+		DE005BDF18D0EE860057C6A9 /* POWTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE005BDE18D0EE860057C6A9 /* POWTileView.m */; };
+		DE005BE218D0FA2C0057C6A9 /* POWColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */; };
 		DE61D24818CFB50300728DA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24718CFB50300728DA4 /* Foundation.framework */; };
 		DE61D24A18CFB50300728DA4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24918CFB50300728DA4 /* CoreGraphics.framework */; };
 		DE61D24C18CFB50300728DA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24B18CFB50300728DA4 /* UIKit.framework */; };
@@ -34,6 +37,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DE005BD918D0ED050057C6A9 /* POWTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWTile.h; sourceTree = "<group>"; };
+		DE005BDA18D0ED050057C6A9 /* POWTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POWTile.m; sourceTree = "<group>"; };
+		DE005BDD18D0EE860057C6A9 /* POWTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = POWTileView.h; path = ../POWTileView.h; sourceTree = "<group>"; };
+		DE005BDE18D0EE860057C6A9 /* POWTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = POWTileView.m; path = ../POWTileView.m; sourceTree = "<group>"; };
+		DE005BE018D0FA2C0057C6A9 /* POWColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWColorPicker.h; sourceTree = "<group>"; };
+		DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POWColorPicker.m; sourceTree = "<group>"; };
 		DE61D24418CFB50300728DA4 /* 2POW11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 2POW11.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE61D24718CFB50300728DA4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DE61D24918CFB50300728DA4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -79,6 +88,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE005BDC18D0ED930057C6A9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DE005BD918D0ED050057C6A9 /* POWTile.h */,
+				DE005BDA18D0ED050057C6A9 /* POWTile.m */,
+			);
+			name = Model;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		DE61D23B18CFB50300728DA4 = {
 			isa = PBXGroup;
 			children = (
@@ -114,8 +133,13 @@
 			children = (
 				DE61D25C18CFB50300728DA4 /* POWViewController.h */,
 				DE61D25D18CFB50300728DA4 /* POWViewController.m */,
+				DE005BDD18D0EE860057C6A9 /* POWTileView.h */,
+				DE005BDE18D0EE860057C6A9 /* POWTileView.m */,
+				DE005BE018D0FA2C0057C6A9 /* POWColorPicker.h */,
+				DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */,
 				DE61D25F18CFB50300728DA4 /* Images.xcassets */,
 				DE61D25918CFB50300728DA4 /* Main.storyboard */,
+				DE005BDC18D0ED930057C6A9 /* Model */,
 				DE61D24E18CFB50300728DA4 /* Supporting Files */,
 			);
 			path = 2POW11;
@@ -250,6 +274,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE005BE218D0FA2C0057C6A9 /* POWColorPicker.m in Sources */,
+				DE005BDB18D0ED050057C6A9 /* POWTile.m in Sources */,
+				DE005BDF18D0EE860057C6A9 /* POWTileView.m in Sources */,
 				DE61D25418CFB50300728DA4 /* main.m in Sources */,
 				DE61D25818CFB50300728DA4 /* POWAppDelegate.m in Sources */,
 				DE61D25E18CFB50300728DA4 /* POWViewController.m in Sources */,
@@ -326,6 +353,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"POW_DEBUG_MODE=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
