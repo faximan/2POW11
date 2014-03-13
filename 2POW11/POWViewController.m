@@ -59,13 +59,13 @@
     if (emptySquares.count == 0) {
         NSLog(@"LOSE!");
     } else {
+        // Add a number to a random free tile.
         const unsigned int randTileIndex = arc4random() % emptySquares.count;
         const unsigned int index = [(NSNumber *)[emptySquares objectAtIndex:randTileIndex] intValue];
         POWTile *randTile = self.tiles[index];
-        NSAssert(randTile.number == 0, @"Tried to update a non-empty tile");
 
-        // Assign 1 to the new tile.
-        randTile.number = 1;
+        // Assign 1 or 2 to the new tile with 50-50 probability.
+        randTile.number = (drand48() < 0.5) ? 1 : 2;
     }
 }
 
@@ -80,24 +80,9 @@
 }
 
 
-// Returns the index of the tile we moved to or -1 otherwise.
-- (int)tryMergeTileWithIndex:(unsigned int)index dx:(int)dx dy:(int)dy {
-    int nextIdx = [self indexOfTileNextTo:index dx:dx dy:dy];
-    NSAssert(nextIdx >= 0, @"Tried to move outside of board");
-
-    POWTile *curTile = self.tiles[index];
-    POWTile *nextTile = self.tiles[nextIdx];
-    if (nextTile.number == curTile.number) {
-        nextTile.number *= 2;
-        curTile.number = 0;
-        return nextIdx;
-    }
-    return -1;
-}
-
-- (void)moveTileWithIndex:(unsigned int)index asFarAsPossibleDx:(int)dx dy:(int)dy {
+- (void)moveTileAsFarAsPossibleToTheLeftWithIndex:(unsigned int)index {
     while (1) {
-        int nextIdx = [self indexOfTileNextTo:index dx:dx dy:dy];
+        int nextIdx = [self indexOfTileNextTo:index dx:-1 dy:0];
         if (nextIdx < 0) return;  // Reached border.
         POWTile *curTile = self.tiles[index];
         POWTile *nextTile = self.tiles[nextIdx];
@@ -112,14 +97,16 @@
     }
 }
 
-- (IBAction)left {
+// Moves all tiles to the left, merging the tiles that fit together.
+- (void)moveLeft {
+    // Moves all tiles as far to the left as possible.
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
-            [self moveTileWithIndex:j*4+i asFarAsPossibleDx:-1 dy:0];
+            [self moveTileAsFarAsPossibleToTheLeftWithIndex:j*4+i];
         }
     }
 
-
+    // Merge the tiles that have the same number and now touches each other.
     int moved[16];
     memset(moved, 0, sizeof(moved));
     for (int i = 3; i > 0; i--) {
@@ -128,117 +115,71 @@
             // Do not move the same tile twice.
             if (moved[curIdx])
                 continue;
-            int movedToIdx = [self tryMergeTileWithIndex:curIdx dx:-1 dy:0];
-            if (movedToIdx >= 0) {
-                moved[movedToIdx] = 1;
+            int nextIdx = [self indexOfTileNextTo:curIdx dx:-1 dy:0];
+            POWTile *curTile = self.tiles[curIdx];
+            POWTile *nextTile = self.tiles[nextIdx];
+
+            // Is curTile mergeable with nextTile?
+            if (nextTile.number == curTile.number) {
+                nextTile.number *= 2;
+                curTile.number = 0;
+                 moved[nextIdx] = 1;
             }
         }
     }
 
+    // Fill holes that might have been created.
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             const unsigned int curIdx = j*4+i;
             if (moved[curIdx])
                 continue;
-            [self moveTileWithIndex:curIdx asFarAsPossibleDx:-1 dy:0];
+            [self moveTileAsFarAsPossibleToTheLeftWithIndex:curIdx];
         }
     }
+}
+
+- (void)rotateTileMatrix90Degrees {
+    for (int x = 0; x < 2; x++) {
+        for (int y = 0; y < 2; y++) {
+            unsigned int temp = ((POWTile *)self.tiles[x + y*4]).number;
+            ((POWTile *)self.tiles[x + 4*y]).number = ((POWTile *)self.tiles[y + 4*(3-x)]).number;
+            ((POWTile *)self.tiles[y + 4*(3-x)]).number =  ((POWTile *)self.tiles[3-x + 4*(3-y)]).number;
+            ((POWTile *)self.tiles[3-x + 4*(3-y)]).number =  ((POWTile *)self.tiles[3-y + 4*x]).number;
+            ((POWTile *)self.tiles[3-y + 4*x]).number = temp;
+        }
+    }
+}
+
+- (IBAction)left {
+    [self moveLeft];
     [self nextState];
 }
 
 - (IBAction)right {
-    for (int i = 3; i >= 0; i--) {
-        for (int j = 0; j < 4; j++) {
-            [self moveTileWithIndex:j*4+i asFarAsPossibleDx:1 dy:0];
-        }
-    }
-
-    int moved[16];
-    memset(moved, 0, sizeof(moved));
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = j * 4 + i;
-            // Do not move the same tile twice.
-            if (moved[curIdx])
-                continue;
-            int movedToIdx = [self tryMergeTileWithIndex:curIdx dx:1 dy:0];
-            if (movedToIdx >= 0) {
-                moved[movedToIdx] = 1;
-            }
-        }
-    }
-    for (int i = 3; i >= 0; i--) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = j*4+i;
-            if (moved[curIdx])
-                continue;
-            [self moveTileWithIndex:curIdx asFarAsPossibleDx:1 dy:0];
-        }
-    }
-    [self nextState];
-}
-
-- (IBAction)up {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            [self moveTileWithIndex:j*4+i asFarAsPossibleDx:0 dy:-1];
-        }
-    }
-
-    int moved[16];
-    memset(moved, 0, sizeof(moved));
-    for (int i = 3; i > 0; i--) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = i * 4 + j;
-            // Do not move the same tile twice.
-            if (moved[curIdx])
-                continue;
-            int movedToIdx = [self tryMergeTileWithIndex:curIdx dx:0 dy:-1];
-            if (movedToIdx >= 0) {
-                moved[movedToIdx] = 1;
-            }
-        }
-    }
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = j*4+i;
-            if (moved[curIdx])
-                continue;
-            [self moveTileWithIndex:curIdx asFarAsPossibleDx:0 dy:-1];
-        }
-    }
+    [self rotateTileMatrix90Degrees];
+    [self rotateTileMatrix90Degrees];
+    [self moveLeft];
+    [self rotateTileMatrix90Degrees];
+    [self rotateTileMatrix90Degrees];
     [self nextState];
 }
 
 - (IBAction)down {
-    for (int i = 0; i < 4; i++) {
-        for (int j = 3; j >= 0; j--) {
-            [self moveTileWithIndex:j*4+i asFarAsPossibleDx:0 dy:1];
-        }
-    }
+    [self rotateTileMatrix90Degrees];
+    [self moveLeft];
+    [self rotateTileMatrix90Degrees];
+    [self rotateTileMatrix90Degrees];
+    [self rotateTileMatrix90Degrees];
+    [self nextState];
+}
 
-    int moved[16];
-    memset(moved, 0, sizeof(moved));
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = i * 4 + j;
-            // Do not move the same tile twice.
-            if (moved[curIdx])
-                continue;
-            int movedToIdx = [self tryMergeTileWithIndex:curIdx dx:0 dy:1];
-            if (movedToIdx >= 0) {
-                moved[movedToIdx] = 1;
-            }
-        }
-    }
-    for (int i = 0; i < 4; i++) {
-        for (int j = 3; j >= 0; j--) {
-            const unsigned int curIdx = j*4+i;
-            if (moved[curIdx])
-                continue;
-            [self moveTileWithIndex:curIdx asFarAsPossibleDx:0 dy:1];
-        }
-    }
+- (IBAction)up {
+    [self rotateTileMatrix90Degrees];
+    [self rotateTileMatrix90Degrees];
+    [self rotateTileMatrix90Degrees];
+    [self moveLeft];
+    [self rotateTileMatrix90Degrees];
     [self nextState];
 }
 
