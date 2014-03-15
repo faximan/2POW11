@@ -49,16 +49,22 @@
     return (m_tiles[BOARD_HEIGHT-1][column] == 0);
 }
 
-// Returns YES if all tiles on the board are occupied.
-- (BOOL)isBoardFull {
-    for (int i = 0; i < BOARD_HEIGHT; i++) {
-        for (int j = 0; j < BOARD_WIDTH; j++) {
-            if (m_tiles[i][j] == 0) {
-                return false;
+// Returns true if there are available moves.
+- (BOOL)hasAvailableMoves {
+    for (int r = 0; r < BOARD_HEIGHT; r++) {
+        for (int c = 0; c < BOARD_WIDTH; c++) {
+            // If the board is not full then there are always moves.
+            if (m_tiles[r][c] == 0) {
+                return true;
+            }
+
+            // If two tiles next to each other are the same, you can do a swipe move.
+            if (c != 0 && m_tiles[r][c-1] == m_tiles[r][c]) {
+                return true;
             }
         }
     }
-    return true;
+    return false;
 }
 
 - (void)insertTileWithNumber:(unsigned int)number atColumn:(unsigned int)column {
@@ -75,7 +81,7 @@
     if (![self collapsedTilesDownwardsForColumn:column]) {
 
         // No tiles merged. Is this the end?
-        if ([self isBoardFull]) {
+        if (![self hasAvailableMoves]) {
             [self newGame];
         }
     }
@@ -234,7 +240,12 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
 // Triggered when the user touches the view. Place the current tile where
 // it is and create a new one.
 - (void)tapReceived {
-    unsigned int current_column = [self.headTileView currentColumn];
+    int current_column = [self.headTileView currentColumn];
+    // Make sure we really have a tile to drop.
+    if (current_column < 0) {
+        return;
+    }
+
     unsigned int current_value = [self.headTileView currentValue];
     [self insertTileWithNumber:current_value atColumn:current_column];
     [self.headTileView newTile];

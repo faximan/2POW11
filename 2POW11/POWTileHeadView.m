@@ -16,7 +16,7 @@
     int m_columns_to_skip[BOARD_WIDTH];
 }
 
-@property (nonatomic) unsigned int tilePosition;  // Current x position for head tile.
+@property (nonatomic) int tilePosition;  // Current x position for head tile.
 @property (nonatomic, strong) POWTileView *headTile;
 @property (nonatomic, strong) NSTimer *timer;
 @end
@@ -26,7 +26,6 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         self.headTile = [[POWTileView alloc] initWithFrame:CGRectMake(0, 0, TILE_SIZE, TILE_SIZE)];
-        [self addSubview:self.headTile];
         [self resetSkippedColumns];
         [self newTile];
     }
@@ -36,17 +35,25 @@
 
 // Sets the position for the head tile based on the current tilePosition.
 - (void)setPositionForHeadTile {
-    self.headTile.frame = CGRectMake(self.tilePosition * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
+    [self.headTile removeFromSuperview];
+    if (self.tilePosition >= 0) {
+        self.headTile.frame = CGRectMake(self.tilePosition * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE);
+        [self addSubview:self.headTile];
+    }
 }
 
-- (void)setTilePosition:(unsigned int)tilePosition {
+- (void)setTilePosition:(int)tilePosition {
     _tilePosition = tilePosition;
     [self setPositionForHeadTile];
 }
 
 // Moves the tile one step to the right (wrapping around if necessary).
 - (void)nextTilePosition {
-    do {
+    if (![self hasAvailableColumns]) {
+        return;
+    }
+
+    do{
         self.tilePosition = (self.tilePosition + 1) % BOARD_WIDTH;
     } while (m_columns_to_skip[self.tilePosition] != 0);
 }
@@ -64,15 +71,15 @@
 }
 
 - (void)newTile {
+    [self.headTile removeFromSuperview];
     [self.headTile setRandomNumber];
-    self.tilePosition = [self firstAvailableColumn];
 
+    self.tilePosition = [self firstAvailableColumn];
     // Update position every MOVE_SPEED
     [self resetTimer];
-    
 }
 
-- (unsigned int)currentColumn {
+- (int)currentColumn {
     return self.tilePosition;
 }
 
@@ -96,14 +103,17 @@
     m_columns_to_skip[column] = 0;
 }
 
-- (unsigned int)firstAvailableColumn {
+- (BOOL)hasAvailableColumns {
+    return ([self firstAvailableColumn] != -1);
+}
+
+- (int)firstAvailableColumn {
     for (int i = 0; i < BOARD_WIDTH; i++) {
         if (m_columns_to_skip[i] == 0) {
             return i;
         }
     }
-    NSAssert(0, @"No availble columns");
-    return 0;  // Error.
+    return -1;  // No available columns.
 }
 
 
