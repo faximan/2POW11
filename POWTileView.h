@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#define BOARD_HEIGHT 5
+#define BOARD_WIDTH 4
+#define TILE_SIZE 75
+
 @interface POWTileView : UIView
 
-@property (nonatomic, weak) IBOutlet UILabel *label;
+@property (nonatomic) unsigned int tileViewNumber;
 
 @end

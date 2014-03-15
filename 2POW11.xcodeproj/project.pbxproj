@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE005BDB18D0ED050057C6A9 /* POWTile.m in Sources */ = {isa = PBXBuildFile; fileRef = DE005BDA18D0ED050057C6A9 /* POWTile.m */; };
 		DE005BDF18D0EE860057C6A9 /* POWTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = DE005BDE18D0EE860057C6A9 /* POWTileView.m */; };
 		DE005BE218D0FA2C0057C6A9 /* POWColorPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */; };
 		DE61D24818CFB50300728DA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24718CFB50300728DA4 /* Foundation.framework */; };
@@ -24,6 +23,8 @@
 		DE61D26918CFB50300728DA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24B18CFB50300728DA4 /* UIKit.framework */; };
 		DE61D27118CFB50300728DA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DE61D26F18CFB50300728DA4 /* InfoPlist.strings */; };
 		DE61D27318CFB50300728DA4 /* _POW11Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = DE61D27218CFB50300728DA4 /* _POW11Tests.m */; };
+		DEE9CED518D4A16E00AE88F3 /* POWTileBodyView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE9CED418D4A16E00AE88F3 /* POWTileBodyView.m */; };
+		DEE9CED818D4A63A00AE88F3 /* POWTileHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE9CED718D4A63A00AE88F3 /* POWTileHeadView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,8 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DE005BD918D0ED050057C6A9 /* POWTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWTile.h; sourceTree = "<group>"; };
-		DE005BDA18D0ED050057C6A9 /* POWTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POWTile.m; sourceTree = "<group>"; };
 		DE005BDD18D0EE860057C6A9 /* POWTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = POWTileView.h; path = ../POWTileView.h; sourceTree = "<group>"; };
 		DE005BDE18D0EE860057C6A9 /* POWTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = POWTileView.m; path = ../POWTileView.m; sourceTree = "<group>"; };
 		DE005BE018D0FA2C0057C6A9 /* POWColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWColorPicker.h; sourceTree = "<group>"; };
@@ -62,6 +61,10 @@
 		DE61D26E18CFB50300728DA4 /* 2POW11Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "2POW11Tests-Info.plist"; sourceTree = "<group>"; };
 		DE61D27018CFB50300728DA4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DE61D27218CFB50300728DA4 /* _POW11Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _POW11Tests.m; sourceTree = "<group>"; };
+		DEE9CED318D4A16E00AE88F3 /* POWTileBodyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWTileBodyView.h; sourceTree = "<group>"; };
+		DEE9CED418D4A16E00AE88F3 /* POWTileBodyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POWTileBodyView.m; sourceTree = "<group>"; };
+		DEE9CED618D4A63A00AE88F3 /* POWTileHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWTileHeadView.h; sourceTree = "<group>"; };
+		DEE9CED718D4A63A00AE88F3 /* POWTileHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POWTileHeadView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,8 +94,6 @@
 		DE005BDC18D0ED930057C6A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DE005BD918D0ED050057C6A9 /* POWTile.h */,
-				DE005BDA18D0ED050057C6A9 /* POWTile.m */,
 			);
 			name = Model;
 			path = ..;
@@ -135,9 +136,10 @@
 				DE61D25D18CFB50300728DA4 /* POWViewController.m */,
 				DE005BDD18D0EE860057C6A9 /* POWTileView.h */,
 				DE005BDE18D0EE860057C6A9 /* POWTileView.m */,
-				DE005BE018D0FA2C0057C6A9 /* POWColorPicker.h */,
-				DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */,
-				DE61D25F18CFB50300728DA4 /* Images.xcassets */,
+				DEE9CED318D4A16E00AE88F3 /* POWTileBodyView.h */,
+				DEE9CED418D4A16E00AE88F3 /* POWTileBodyView.m */,
+				DEE9CED618D4A63A00AE88F3 /* POWTileHeadView.h */,
+				DEE9CED718D4A63A00AE88F3 /* POWTileHeadView.m */,
 				DE61D25918CFB50300728DA4 /* Main.storyboard */,
 				DE005BDC18D0ED930057C6A9 /* Model */,
 				DE61D24E18CFB50300728DA4 /* Supporting Files */,
@@ -148,8 +150,11 @@
 		DE61D24E18CFB50300728DA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DE005BE018D0FA2C0057C6A9 /* POWColorPicker.h */,
+				DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */,
 				DE61D25618CFB50300728DA4 /* POWAppDelegate.h */,
 				DE61D25718CFB50300728DA4 /* POWAppDelegate.m */,
+				DE61D25F18CFB50300728DA4 /* Images.xcassets */,
 				DE61D24F18CFB50300728DA4 /* 2POW11-Info.plist */,
 				DE61D25018CFB50300728DA4 /* InfoPlist.strings */,
 				DE61D25318CFB50300728DA4 /* main.m */,
@@ -275,11 +280,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE005BE218D0FA2C0057C6A9 /* POWColorPicker.m in Sources */,
-				DE005BDB18D0ED050057C6A9 /* POWTile.m in Sources */,
 				DE005BDF18D0EE860057C6A9 /* POWTileView.m in Sources */,
 				DE61D25418CFB50300728DA4 /* main.m in Sources */,
+				DEE9CED518D4A16E00AE88F3 /* POWTileBodyView.m in Sources */,
 				DE61D25818CFB50300728DA4 /* POWAppDelegate.m in Sources */,
 				DE61D25E18CFB50300728DA4 /* POWViewController.m in Sources */,
+				DEE9CED818D4A63A00AE88F3 /* POWTileHeadView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +414,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "2POW11/2POW11-Prefix.pch";
 				INFOPLIST_FILE = "2POW11/2POW11-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -421,6 +428,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "2POW11/2POW11-Prefix.pch";
 				INFOPLIST_FILE = "2POW11/2POW11-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

@@ -8,16 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "POWTileView.h"
+#import "POWTileHeadView.h"
+#import "POWTileBodyView.h"
 
 @interface POWViewController : UIViewController
 
-@property (nonatomic, strong) IBOutletCollection(POWTileView) NSArray *tilesViews;
-
-- (IBAction)left;
-- (IBAction)right;
-- (IBAction)up;
-- (IBAction)down;
+@property (nonatomic, weak) IBOutlet UILabel *scoreLabel;
+@property (nonatomic, weak) IBOutlet POWTileHeadView *headTileView;
+@property (nonatomic, weak) IBOutlet POWTileBodyView *bodyTileView;
 
 @end
 

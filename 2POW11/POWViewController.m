@@ -9,193 +9,135 @@
 #import "POWViewController.h"
 
 #import "POWColorPicker.h"
-#import "POWTile.h"
+#import "POWTileView.h"
 
-#define WINNING_NUMBER 32
-
-@interface POWViewController() <POWTileDelegate>
-@property (nonatomic, strong) NSMutableArray *tiles;
+@interface POWViewController() {
+    // Tile matrix. (0,0) is lower left corner.
+    unsigned int m_tiles[BOARD_HEIGHT][BOARD_WIDTH];
+}
+@property (nonatomic) unsigned int score;
 @end
 
 @implementation POWViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    // The order of an IBOutletCollection is not known. Sort by tag propery.
-    [self.tilesViews sortedArrayUsingComparator:^NSComparisonResult
-     (id objA, id objB){
-        return(([objA tag] < [objB tag]) ? NSOrderedAscending  :
-               ([objA tag] > [objB tag]) ? NSOrderedDescending :
-               NSOrderedSame);
-     }];
-
-    self.tiles = [[NSMutableArray alloc] init];
-    for (unsigned int i = 0; i < 16; i++) {
-        POWTile *tile = [[POWTile alloc] initWithIndex:i];
-        tile.delegate = self;
-        [self.tiles addObject:tile];
-    }
-
-    unsigned int startTileIndex = arc4random() % 16;
-    POWTile *startTile = self.tiles[startTileIndex];
-    startTile.number = 1;
+    [self newGame];
 }
 
-- (void)nextState {
-    // Check for winning and loosing.
-    NSMutableArray *emptySquares = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 16; i++) {
-        POWTile *curTile = self.tiles[i];
-        const unsigned int curNbr = curTile.number;
-        if (curNbr == 0) {
-            [emptySquares addObject:[NSNumber numberWithInt:i]];
-        }
-        if (curNbr == WINNING_NUMBER) {
-            NSLog(@"WIN!");
+// Starts a new game
+- (void)newGame {
+    self.score = 0;
+
+    // Reset tiles matrix.
+    for (int i = 0; i < BOARD_HEIGHT; i++) {
+        for (int j = 0;j < BOARD_WIDTH; j++) {
+            m_tiles[i][j] = 0;
         }
     }
 
-    if (emptySquares.count == 0) {
-        NSLog(@"LOSE!");
+    [self.headTileView resetSkippedColumns];
+}
+
+- (void)setScore:(unsigned int)score {
+    _score = score;
+    self.scoreLabel.text = [NSString stringWithFormat:@"%u", _score];
+}
+
+- (BOOL)canPlaceTileAtColumn:(unsigned int)column {
+    NSAssert(column < BOARD_WIDTH, @"Illegal column");
+    return (m_tiles[BOARD_HEIGHT-1][column] == 0);
+}
+
+// TODO: Implement these
+- (void)tiltLeft {}
+- (void)tiltRight {}
+
+- (void)insertTileWithNumber:(unsigned int)number atColumn:(unsigned int)column {
+    NSAssert([self canPlaceTileAtColumn:column], @"Column is full");
+
+    // Find first available index at the given column
+    int height = 0;
+    while (m_tiles[height][column] != 0) {
+        height++;
+    }
+    m_tiles[height][column] = number;
+
+    // Merge tiles downwards if we can.
+    if (![self collapsedTilesForColumn:column]) {
+        // If this was the last tile on this column, make sure we can't add any more tiles to it.
+        if (height == BOARD_HEIGHT - 1) {
+            [self columnIsFull:(unsigned int)column];
+        }
+    }
+
+    // Update body view.
+    [self syncBodyViewWithTileMatrix];
+}
+
+// Returns true if at least two tiles were collapsed or NO otherwise.
+- (BOOL)collapsedTilesForColumn:(unsigned int)column {
+    BOOL collapsedTiles = NO;
+
+    unsigned int currentRow = BOARD_HEIGHT - 1;
+    while (currentRow > 0) {
+        if (m_tiles[currentRow][column] == 0) {
+            currentRow--;
+        } else if (m_tiles[currentRow][column] == m_tiles[currentRow - 1][column]) {
+            self.score += m_tiles[currentRow][column];
+            m_tiles[currentRow - 1][column] *= 2;
+            m_tiles[currentRow][column] = 0;
+            currentRow--;
+            collapsedTiles = YES;
+        } else {
+            break;
+        }
+    }
+    return collapsedTiles;
+}
+
+- (void)columnIsFull:(unsigned int)column {
+    // Have we lost?
+    if ([self isBoardFull]) {
+        [self newGame];
     } else {
-        // Add a number to a random free tile.
-        const unsigned int randTileIndex = arc4random() % emptySquares.count;
-        const unsigned int index = [(NSNumber *)[emptySquares objectAtIndex:randTileIndex] intValue];
-        POWTile *randTile = self.tiles[index];
-
-        // Assign 1 or 2 to the new tile with 50-50 probability.
-        randTile.number = (drand48() < 0.5) ? 1 : 2;
+        [self.headTileView skipColumn:column];
     }
 }
 
-
-- (int)indexOfTileNextTo:(unsigned int)tile dx:(int)dx dy:(int)dy {
-    int x = tile % 4;
-    int y = tile / 4;
-    x += dx;
-    y += dy;
-    if (x < 0 || y < 0 || x > 3 || y > 3) return -1;  // Tile outside of game.
-    return y * 4 + x;
-}
-
-
-- (void)moveTileAsFarAsPossibleToTheLeftWithIndex:(unsigned int)index {
-    while (1) {
-        int nextIdx = [self indexOfTileNextTo:index dx:-1 dy:0];
-        if (nextIdx < 0) return;  // Reached border.
-        POWTile *curTile = self.tiles[index];
-        POWTile *nextTile = self.tiles[nextIdx];
-
-        // Make sure we don't overwrite an existing tile.
-        if (nextTile.number != 0) {
-            return;
-        }
-        nextTile.number = curTile.number;
-        curTile.number = 0;
-        index = nextIdx;
-    }
-}
-
-// Moves all tiles to the left, merging the tiles that fit together.
-- (void)moveLeft {
-    // Moves all tiles as far to the left as possible.
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            [self moveTileAsFarAsPossibleToTheLeftWithIndex:j*4+i];
-        }
-    }
-
-    // Merge the tiles that have the same number and now touches each other.
-    int moved[16];
-    memset(moved, 0, sizeof(moved));
-    for (int i = 3; i > 0; i--) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = j * 4 + i;
-            // Do not move the same tile twice.
-            if (moved[curIdx])
-                continue;
-            int nextIdx = [self indexOfTileNextTo:curIdx dx:-1 dy:0];
-            POWTile *curTile = self.tiles[curIdx];
-            POWTile *nextTile = self.tiles[nextIdx];
-
-            // Is curTile mergeable with nextTile?
-            if (nextTile.number == curTile.number) {
-                nextTile.number *= 2;
-                curTile.number = 0;
-                 moved[nextIdx] = 1;
+// Returns YES if all tiles on the board are occupied.
+- (BOOL)isBoardFull {
+    for (int i = 0; i < BOARD_HEIGHT; i++) {
+        for (int j = 0; j < BOARD_WIDTH; j++) {
+            if (m_tiles[i][j] == 0) {
+                return false;
             }
         }
     }
+    return true;
+}
 
-    // Fill holes that might have been created.
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
-            const unsigned int curIdx = j*4+i;
-            if (moved[curIdx])
-                continue;
-            [self moveTileAsFarAsPossibleToTheLeftWithIndex:curIdx];
+// Updates the body view so that it matches the current tile matrix configuration.
+- (void)syncBodyViewWithTileMatrix {
+    [self.bodyTileView clearView];
+    for (int i = 0; i < BOARD_HEIGHT; i++) {
+        for (int j = 0;j < BOARD_WIDTH; j++) {
+            if (m_tiles[i][j] != 0) {
+                [self.bodyTileView addTileWithNumber:m_tiles[i][j] ToX:j y:i];
+            }
         }
     }
 }
 
-- (void)rotateTileMatrix90Degrees {
-    for (int x = 0; x < 2; x++) {
-        for (int y = 0; y < 2; y++) {
-            unsigned int temp = ((POWTile *)self.tiles[x + y*4]).number;
-            ((POWTile *)self.tiles[x + 4*y]).number = ((POWTile *)self.tiles[y + 4*(3-x)]).number;
-            ((POWTile *)self.tiles[y + 4*(3-x)]).number =  ((POWTile *)self.tiles[3-x + 4*(3-y)]).number;
-            ((POWTile *)self.tiles[3-x + 4*(3-y)]).number =  ((POWTile *)self.tiles[3-y + 4*x]).number;
-            ((POWTile *)self.tiles[3-y + 4*x]).number = temp;
-        }
-    }
-}
-
-- (IBAction)left {
-    [self moveLeft];
-    [self nextState];
-}
-
-- (IBAction)right {
-    [self rotateTileMatrix90Degrees];
-    [self rotateTileMatrix90Degrees];
-    [self moveLeft];
-    [self rotateTileMatrix90Degrees];
-    [self rotateTileMatrix90Degrees];
-    [self nextState];
-}
-
-- (IBAction)down {
-    [self rotateTileMatrix90Degrees];
-    [self moveLeft];
-    [self rotateTileMatrix90Degrees];
-    [self rotateTileMatrix90Degrees];
-    [self rotateTileMatrix90Degrees];
-    [self nextState];
-}
-
-- (IBAction)up {
-    [self rotateTileMatrix90Degrees];
-    [self rotateTileMatrix90Degrees];
-    [self rotateTileMatrix90Degrees];
-    [self moveLeft];
-    [self rotateTileMatrix90Degrees];
-    [self nextState];
+// Triggered when the user touches the view. Place the current tile where
+// it is and create a new one.
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    unsigned int current_column = [self.headTileView currentColumn];
+    unsigned int current_value = [self.headTileView currentValue];
+    [self insertTileWithNumber:current_value atColumn:current_column];
+    [self.headTileView newTile];
 }
 
 
-#pragma mark POWTileDelegate
-
-- (void)powTileDelegate:(POWTile *)sender
-  didUpdateTileToNumber:(unsigned int)number {
-    // Assume that the sender index is between 0 and 15 inclusive.
-    POWTileView *tileView = self.tilesViews[[sender getIndex]];
-
-    if (sender.number != 0)
-        tileView.label.text = [NSString stringWithFormat:@"%d", sender.number];
-    else
-        tileView.label.text = @"";
-    tileView.backgroundColor = [POWColorPicker colorForNumber:sender.number];
-}
 
 @end
