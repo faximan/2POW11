@@ -51,11 +51,6 @@
     } while (m_columns_to_skip[self.tilePosition] != 0);
 }
 
-// Randomizes a number as the starting number for this tile.
-- (unsigned int)randomizeHeadTileNumber {
-    return (drand48() < 0.5) ? 1 : 2;
-}
-
 - (void)resetTimer {
     // Stop the current timer if there is one.
     if (self.timer.isValid) {
@@ -69,7 +64,7 @@
 }
 
 - (void)newTile {
-    self.headTile.tileViewNumber = [self randomizeHeadTileNumber];
+    [self.headTile setRandomNumber];
     self.tilePosition = [self firstAvailableColumn];
 
     // Update position every MOVE_SPEED

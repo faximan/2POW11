@@ -11,6 +11,29 @@
 
 @implementation POWTileBodyView
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        // Add swipe recognizers
+        UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc]
+                                               initWithTarget:self
+                                               action:@selector(swipeLeftReceived)];
+        swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+        [self addGestureRecognizer:swipeLeft];
+
+        UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc]
+                                                initWithTarget:self
+                                                action:@selector(swipeRightReceived)];
+        swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+        [self addGestureRecognizer:swipeRight];
+
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                       initWithTarget:self
+                                       action:@selector(tapReceived)];
+        [self addGestureRecognizer:tap];
+    }
+    return self;
+}
+
 - (void)clearView {
     for (UIView *subView in self.subviews) {
         [subView removeFromSuperview];
@@ -29,5 +52,17 @@
     [self addSubview:newTile];
 }
 
+
+- (void)tapReceived {
+    [self.delegate tapReceived];
+}
+
+- (void)swipeLeftReceived {
+    [self.delegate swipeLeftReceived];
+}
+
+- (void)swipeRightReceived {
+    [self.delegate swipeRightReceived];
+}
 
 @end

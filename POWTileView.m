@@ -33,4 +33,14 @@
     self.backgroundColor = [POWColorPicker colorForNumber:self.tileViewNumber];
 }
 
+- (void)setRandomNumber {
+    if (drand48() < 0.25) {
+        self.tileViewNumber = 4;
+    } else if (drand48() < 0.5) {
+        self.tileViewNumber = 2;
+    } else {
+        self.tileViewNumber = 1;
+    }
+}
+
 @end

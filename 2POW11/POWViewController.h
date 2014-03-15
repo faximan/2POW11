@@ -11,7 +11,7 @@
 #import "POWTileHeadView.h"
 #import "POWTileBodyView.h"
 
-@interface POWViewController : UIViewController
+@interface POWViewController : UIViewController <POWTileBodyViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UILabel *scoreLabel;
 @property (nonatomic, weak) IBOutlet POWTileHeadView *headTileView;

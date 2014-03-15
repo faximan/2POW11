@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#define BOARD_HEIGHT 5
-#define BOARD_WIDTH 4
-#define TILE_SIZE 75
+#define BOARD_HEIGHT 6
+#define BOARD_WIDTH 5
+#define TILE_SIZE 60
 
 @interface POWTileView : UIView
 
 @property (nonatomic) unsigned int tileViewNumber;
+
+- (void)setRandomNumber;
 
 @end
