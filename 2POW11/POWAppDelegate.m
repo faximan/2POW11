@@ -12,7 +12,7 @@
 #import <LARSAdController/TOLAdAdapteriAds.h>
 #import <LARSAdController/TOLAdAdapterGoogleAds.h>
 
-#define GoogleAdsPublisherID @"ca-app-pub-2033561029327939/9394333208"
+#import "POWConstants.h"
 
 @implementation POWAppDelegate
 

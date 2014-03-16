@@ -7,6 +7,8 @@
 //
 
 #import "POWTileBodyView.h"
+
+#import "POWConstants.h"
 #import "POWTileView.h"
 
 @implementation POWTileBodyView
@@ -46,10 +48,10 @@
     NSAssert(tileX + TILE_SIZE <= self.frame.size.width, @"Illegal width");
     NSAssert(tileY + TILE_SIZE <= self.frame.size.height, @"Illegal height");
 
-    POWTileView *newTile = [[POWTileView alloc]
-                            initWithFrame:CGRectMake(tileX, tileY, TILE_SIZE, TILE_SIZE)];
-    newTile.tileViewNumber = number;
-    [self addSubview:newTile];
+    POWTileView *newTileView = [[POWTileView alloc]
+                                initWithFrame:CGRectMake(tileX, tileY, TILE_SIZE, TILE_SIZE)];
+    newTileView.number = number;
+    [self addSubview:newTileView];
 }
 
 

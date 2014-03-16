@@ -27,6 +27,8 @@
 		DE61D26718CFB50300728DA4 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D26618CFB50300728DA4 /* XCTest.framework */; };
 		DE61D26818CFB50300728DA4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24718CFB50300728DA4 /* Foundation.framework */; };
 		DE61D26918CFB50300728DA4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE61D24B18CFB50300728DA4 /* UIKit.framework */; };
+		DE787A1018D6078F0089F946 /* POWTile.m in Sources */ = {isa = PBXBuildFile; fileRef = DE787A0F18D6078F0089F946 /* POWTile.m */; };
+		DE787A1318D609FD0089F946 /* POWBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = DE787A1218D609FD0089F946 /* POWBoard.m */; };
 		DEE9CED518D4A16E00AE88F3 /* POWTileBodyView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE9CED418D4A16E00AE88F3 /* POWTileBodyView.m */; };
 		DEE9CED818D4A63A00AE88F3 /* POWTileHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = DEE9CED718D4A63A00AE88F3 /* POWTileHeadView.m */; };
 		F1F4CE6195534D42B41C1B4A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDA86A3A10A74B3B87B4EA30 /* libPods.a */; };
@@ -71,6 +73,11 @@
 		DE61D25F18CFB50300728DA4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DE61D26518CFB50300728DA4 /* 2POW11Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 2POW11Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE61D26618CFB50300728DA4 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		DE787A0E18D6078F0089F946 /* POWTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = POWTile.h; path = 2POW11/POWTile.h; sourceTree = "<group>"; };
+		DE787A0F18D6078F0089F946 /* POWTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = POWTile.m; path = 2POW11/POWTile.m; sourceTree = "<group>"; };
+		DE787A1118D609FD0089F946 /* POWBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = POWBoard.h; path = 2POW11/POWBoard.h; sourceTree = "<group>"; };
+		DE787A1218D609FD0089F946 /* POWBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = POWBoard.m; path = 2POW11/POWBoard.m; sourceTree = "<group>"; };
+		DE787A1418D611120089F946 /* POWConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = POWConstants.h; sourceTree = "<group>"; };
 		DEE9CED318D4A16E00AE88F3 /* POWTileBodyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWTileBodyView.h; sourceTree = "<group>"; };
 		DEE9CED418D4A16E00AE88F3 /* POWTileBodyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = POWTileBodyView.m; sourceTree = "<group>"; };
 		DEE9CED618D4A63A00AE88F3 /* POWTileHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = POWTileHeadView.h; sourceTree = "<group>"; };
@@ -111,6 +118,10 @@
 		DE005BDC18D0ED930057C6A9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DE787A0E18D6078F0089F946 /* POWTile.h */,
+				DE787A0F18D6078F0089F946 /* POWTile.m */,
+				DE787A1118D609FD0089F946 /* POWBoard.h */,
+				DE787A1218D609FD0089F946 /* POWBoard.m */,
 			);
 			name = Model;
 			path = ..;
@@ -156,14 +167,14 @@
 		DE61D24D18CFB50300728DA4 /* 2POW11 */ = {
 			isa = PBXGroup;
 			children = (
-				DE4A3AE118D5F2A800428965 /* POWTileView.h */,
-				DE4A3AE218D5F2A800428965 /* POWTileView.m */,
 				DE61D25C18CFB50300728DA4 /* POWViewController.h */,
 				DE61D25D18CFB50300728DA4 /* POWViewController.m */,
 				DEE9CED318D4A16E00AE88F3 /* POWTileBodyView.h */,
 				DEE9CED418D4A16E00AE88F3 /* POWTileBodyView.m */,
 				DEE9CED618D4A63A00AE88F3 /* POWTileHeadView.h */,
 				DEE9CED718D4A63A00AE88F3 /* POWTileHeadView.m */,
+				DE4A3AE118D5F2A800428965 /* POWTileView.h */,
+				DE4A3AE218D5F2A800428965 /* POWTileView.m */,
 				DE61D25918CFB50300728DA4 /* Main.storyboard */,
 				DE005BDC18D0ED930057C6A9 /* Model */,
 				DE61D24E18CFB50300728DA4 /* Supporting Files */,
@@ -174,6 +185,7 @@
 		DE61D24E18CFB50300728DA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				DE787A1418D611120089F946 /* POWConstants.h */,
 				DE005BE018D0FA2C0057C6A9 /* POWColorPicker.h */,
 				DE005BE118D0FA2C0057C6A9 /* POWColorPicker.m */,
 				DE61D25618CFB50300728DA4 /* POWAppDelegate.h */,
@@ -319,10 +331,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE787A1018D6078F0089F946 /* POWTile.m in Sources */,
 				DE005BE218D0FA2C0057C6A9 /* POWColorPicker.m in Sources */,
 				DE61D25418CFB50300728DA4 /* main.m in Sources */,
 				DEE9CED518D4A16E00AE88F3 /* POWTileBodyView.m in Sources */,
 				DE4A3AE318D5F2A800428965 /* POWTileView.m in Sources */,
+				DE787A1318D609FD0089F946 /* POWBoard.m in Sources */,
 				DE61D25818CFB50300728DA4 /* POWAppDelegate.m in Sources */,
 				DE61D25E18CFB50300728DA4 /* POWViewController.m in Sources */,
 				DEE9CED818D4A63A00AE88F3 /* POWTileHeadView.m in Sources */,

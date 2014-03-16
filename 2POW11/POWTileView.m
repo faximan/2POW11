@@ -27,20 +27,10 @@
     return self;
 }
 
-- (void)setTileViewNumber:(unsigned int)tileViewNumber {
-    _tileViewNumber = tileViewNumber;
-    self.numberLabel.text = [NSString stringWithFormat:@"%u", self.tileViewNumber];
-    self.backgroundColor = [POWColorPicker colorForNumber:self.tileViewNumber];
-}
-
-- (void)setRandomNumber {
-    if (drand48() < 0.25) {
-        self.tileViewNumber = 4;
-    } else if (drand48() < 0.5) {
-        self.tileViewNumber = 2;
-    } else {
-        self.tileViewNumber = 1;
-    }
+- (void)setNumber:(unsigned int)number {
+    _number = number;
+    self.numberLabel.text = [NSString stringWithFormat:@"%u", self.number];
+    self.backgroundColor = [POWColorPicker colorForNumber:self.number];
 }
 
 @end

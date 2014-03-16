@@ -8,9 +8,9 @@
 
 #import "POWTileHeadView.h"
 
+#import "POWConstants.h"
+#import "POWTile.h"
 #import "POWTileView.h"
-
-#define MOVE_SPEED 0.5 // Time in seconds for the head tile to move to the next position.
 
 @interface POWTileHeadView() {
     BOOL m_columns_to_skip[BOARD_WIDTH];
@@ -71,7 +71,7 @@
 
 - (void)newTile {
     [self.headTile removeFromSuperview];
-    [self.headTile setRandomNumber];
+    self.headTile.number = [POWTile getRandomNewTileNumber];
 
     [self updateIllegalColumns];
     self.tilePosition = [self firstAvailableColumn];
@@ -84,7 +84,7 @@
 }
 
 - (unsigned int)currentValue {
-    return self.headTile.tileViewNumber;
+    return self.headTile.number;
 }
 
 - (void)updateIllegalColumns {
