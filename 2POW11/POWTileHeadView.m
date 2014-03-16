@@ -26,7 +26,6 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
         self.headTile = [[POWTileView alloc] initWithFrame:CGRectMake(0, 0, TILE_SIZE, TILE_SIZE)];
-        [self resetSkippedColumns];
         [self newTile];
     }
     return self;
@@ -74,6 +73,7 @@
     [self.headTile removeFromSuperview];
     [self.headTile setRandomNumber];
 
+    [self updateIllegalColumns];
     self.tilePosition = [self firstAvailableColumn];
     // Update position every MOVE_SPEED
     [self resetTimer];
@@ -87,20 +87,22 @@
     return self.headTile.tileViewNumber;
 }
 
-- (void)resetSkippedColumns {
+- (void)updateIllegalColumns {
+    NSArray *illegalColumns = [self.delegate illegalColumnsForValue:[self currentValue]];
+
+    // Reset columns
     for (int i = 0; i < BOARD_WIDTH; i++) {
         m_columns_to_skip[i] = 0;
     }
-}
 
-- (void)skipColumn:(unsigned int)column {
-    NSAssert(column < BOARD_WIDTH, @"Illegal column");
-    m_columns_to_skip[column] = 1;
-}
+    for (NSNumber *illegalColumn in illegalColumns) {
+        m_columns_to_skip[[illegalColumn intValue]] = 1;
+    }
 
-- (void)unSkipColumn:(unsigned int)column {
-    NSAssert(column < BOARD_WIDTH, @"Illegal column");
-    m_columns_to_skip[column] = 0;
+    // Move tile if this column is not legal.
+    if (m_columns_to_skip[[self currentColumn]]) {
+        [self nextTilePosition];
+    }
 }
 
 - (BOOL)hasAvailableColumns {

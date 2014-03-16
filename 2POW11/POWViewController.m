@@ -13,7 +13,7 @@
 
 @interface POWViewController() {
     // Tile matrix. (0,0) is lower left corner.
-    unsigned int m_tiles[BOARD_HEIGHT][BOARD_WIDTH];
+    unsigned int m_tiles[BOARD_HEIGHT+1][BOARD_WIDTH];  // +1 to accomodate for extra tile on top that can be collapsed downwards.
 }
 @property (nonatomic) unsigned int score;
 @end
@@ -24,6 +24,7 @@
     [super viewDidLoad];
 
     self.bodyTileView.delegate = self;
+    self.headTileView.delegate = self;
     [self newGame];
 }
 
@@ -32,7 +33,7 @@
     self.score = 0;
 
     // Reset tiles matrix.
-    for (int r = 0; r < BOARD_HEIGHT; r++) {
+    for (int r = 0; r < BOARD_HEIGHT+1; r++) {
         for (int c = 0; c < BOARD_WIDTH; c++) {
             m_tiles[r][c] = 0;
         }
@@ -44,9 +45,12 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"%u", self.score];
 }
 
-- (BOOL)canPlaceTileAtColumn:(unsigned int)column {
+- (BOOL)canPlaceTileAtColumn:(unsigned int)column withValue:(int)value {
     NSAssert(column < BOARD_WIDTH, @"Illegal column");
-    return (m_tiles[BOARD_HEIGHT-1][column] == 0);
+
+    // A tile can be placed if the topmost slot is empty or if it has the same value
+    // as the current tile (will collapse downwards).
+    return (m_tiles[BOARD_HEIGHT-1][column] == 0 || m_tiles[BOARD_HEIGHT-1][column] == value);
 }
 
 // Returns true if there are available moves.
@@ -67,15 +71,15 @@
     return false;
 }
 
-- (void)insertTileWithNumber:(unsigned int)number atColumn:(unsigned int)column {
-    NSAssert([self canPlaceTileAtColumn:column], @"Column is full");
+- (void)insertTileWithValue:(unsigned int)value atColumn:(unsigned int)column {
+    NSAssert([self canPlaceTileAtColumn:column withValue:value], @"Column is full");
 
     // Find first available index at the given column
     int height = 0;
     while (m_tiles[height][column] != 0) {
         height++;
     }
-    m_tiles[height][column] = number;
+    m_tiles[height][column] = value;
 
     // Merge tiles downwards if we can.
     if (![self collapsedTilesDownwardsForColumn:column]) {
@@ -85,9 +89,6 @@
             [self newGame];
         }
     }
-
-    // Update body view.
-    [self syncBodyViewWithTileMatrix];
 }
 
 // -------- Move tiles around --------
@@ -115,7 +116,7 @@
     BOOL collapsedTiles = NO;
 
     do {
-        unsigned int r = BOARD_HEIGHT - 1;
+        unsigned int r = BOARD_HEIGHT;
         while (r > 0) {
             if (m_tiles[r][c] != 0 &&
                 (m_tiles[r][c] == m_tiles[r - 1][c])) {
@@ -190,9 +191,9 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
     *b = temp;
 }
 - (void)rotateTileMatrix180Degrees {
-    for (int r = 0; r < BOARD_HEIGHT / 2; r++) {
+    for (int r = 0; r < (BOARD_HEIGHT + 1) / 2; r++) {
         for (int c = 0; c < BOARD_WIDTH; c++) {
-            swapTileValues(&m_tiles[r][c], &m_tiles[BOARD_HEIGHT - 1 - r][BOARD_WIDTH - 1 - c]);
+            swapTileValues(&m_tiles[r][c], &m_tiles[BOARD_HEIGHT - r][BOARD_WIDTH - 1 - c]);
         }
     }
 }
@@ -201,16 +202,8 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
 
 // Updates the body view so that it matches the current tile matrix configuration.
 - (void)syncBodyViewWithTileMatrix {
-    // Make sure to update the columns to be skipped.
-    [self.headTileView resetSkippedColumns];
-
     [self.bodyTileView clearView];
     for (int c = 0; c < BOARD_WIDTH; c++) {
-
-        // If this column is full, make sure to tell the header.
-        if (m_tiles[BOARD_HEIGHT - 1][c] != 0) {
-            [self.headTileView skipColumn:c];
-        }
         for (int r = 0; r < BOARD_HEIGHT; r++) {
             if (m_tiles[r][c] != 0) {
                 [self.bodyTileView addTileWithNumber:m_tiles[r][c] ToX:c y:r];
@@ -219,12 +212,26 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
     }
 }
 
+#pragma mark POWTileHeadViewDelegate
+
+- (NSArray *)illegalColumnsForValue:(unsigned int)value {
+    NSMutableArray *illegalColumns = [[NSMutableArray alloc] init];
+    for (int c = 0; c < BOARD_WIDTH; c++) {
+        if (![self canPlaceTileAtColumn:c withValue:value]) {
+            [illegalColumns addObject:[NSNumber numberWithInt:c]];
+        }
+    }
+    return illegalColumns;
+}
+
 
 #pragma mark POWTileBodyViewDelegate
 
 - (void)swipeLeftReceived {
     [self collapsedTilesLeft];
     [self collapsedTilesDownwards];
+
+    [self.headTileView updateIllegalColumns];
     [self syncBodyViewWithTileMatrix];
 }
 
@@ -234,6 +241,8 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
     [self collapsedTilesLeft];
     [self rotateTileMatrix180Degrees];
     [self collapsedTilesDownwards];
+
+    [self.headTileView updateIllegalColumns];
     [self syncBodyViewWithTileMatrix];
 }
 
@@ -246,9 +255,10 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
         return;
     }
 
-    unsigned int current_value = [self.headTileView currentValue];
-    [self insertTileWithNumber:current_value atColumn:current_column];
+    [self insertTileWithValue:[self.headTileView currentValue] atColumn:current_column];
     [self.headTileView newTile];
+
+    [self syncBodyViewWithTileMatrix];
 }
 
 
