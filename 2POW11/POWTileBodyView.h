@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "POWTile.h"
+
 @protocol POWTileBodyViewDelegate;
 
 @interface POWTileBodyView : UIView
@@ -15,7 +17,7 @@
 @property (nonatomic, weak) id<POWTileBodyViewDelegate> delegate;
 
 - (void)clearView;
-- (void)addTileWithNumber:(unsigned int)number ToX:(unsigned int)x y:(unsigned int)y;
+- (void)addTile:(POWTile *)tile toRow:(unsigned int)r column:(unsigned int)c;
 
 @end
 

@@ -43,6 +43,10 @@
 - (void)newGame {
     self.score = 0;
     [self.board resetBoard];
+    [self syncBodyViewWithBoard];
+
+    // Start the game by adding the first tile to the head view.
+    [self.headTileView addTile:[POWTile randomTile]];
 }
 
 - (void)setScore:(unsigned int)score {
@@ -55,11 +59,9 @@
     [self.bodyTileView clearView];
     for (int c = 0; c < BOARD_WIDTH; c++) {
         for (int r = 0; r < BOARD_HEIGHT; r++) {
-            unsigned int value = [self.board valueForTileAtRow:r column:c];
-
-            // A value of 0 means no tile.
-            if (value != 0) {
-                [self.bodyTileView addTileWithNumber:value ToX:c y:r];
+            POWTile *tile = [self.board tileAtRow:r column:c];
+            if (tile) {
+                [self.bodyTileView addTile:tile toRow:r column:c];
             }
         }
     }
@@ -67,10 +69,10 @@
 
 #pragma mark POWTileHeadViewDelegate
 
-- (NSArray *)illegalColumnsForValue:(unsigned int)value {
+- (NSArray *)illegalColumnsForTile:(POWTile *)tile {
     NSMutableArray *illegalColumns = [[NSMutableArray alloc] init];
     for (int c = 0; c < BOARD_WIDTH; c++) {
-        if (![self.board canPlaceTileAtColumn:c withValue:value]) {
+        if (![self.board canPlaceTile:tile atColumn:c]) {
             [illegalColumns addObject:[NSNumber numberWithInt:c]];
         }
     }
@@ -84,16 +86,28 @@
     self.score += [self.board collapseTilesLeft];
     self.score += [self.board collapseTilesDownwards];
 
-    [self.headTileView updateIllegalColumns];
-    [self syncBodyViewWithBoard];
+    // Is this the end?
+    if ([self.board hasAvailableMoves]) {
+        [self.headTileView updateIllegalColumns];
+        [self syncBodyViewWithBoard];
+    } else {
+        // Restart game.
+        [self newGame];
+    }
 }
 
 - (void)swipeRightReceived {
     self.score += [self.board collapseTilesRight];
     self.score += [self.board collapseTilesDownwards];
 
-    [self.headTileView updateIllegalColumns];
-    [self syncBodyViewWithBoard];
+    // Is this the end?
+    if ([self.board hasAvailableMoves]) {
+        [self.headTileView updateIllegalColumns];
+        [self syncBodyViewWithBoard];
+    } else {
+        // Restart game.
+        [self newGame];
+    }
 }
 
 // Triggered when the user touches the view. Place the current tile where
@@ -105,12 +119,12 @@
         return;
     }
 
-    unsigned int value = [self.headTileView currentValue];
-    self.score += [self.board insertTileWithValue:value toColumn:currentColumn];
+    POWTile *tile = [self.headTileView currentTile];
+    self.score += [self.board insertTile:tile toColumn:currentColumn];
 
     // Is this the end?
     if ([self.board hasAvailableMoves]) {
-        [self.headTileView newTile];
+        [self.headTileView addTile:[POWTile randomTile]];
         [self syncBodyViewWithBoard];
     } else {
         // Restart game.

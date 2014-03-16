@@ -42,15 +42,15 @@
     }
 }
 
-- (void)addTileWithNumber:(unsigned int)number ToX:(unsigned int)x y:(unsigned int)y {
-    unsigned int tileX = x * TILE_SIZE;
-    unsigned int tileY = (self.frame.size.height - TILE_SIZE) -  y * TILE_SIZE;
+- (void)addTile:(POWTile *)tile toRow:(unsigned int)r column:(unsigned int)c {
+    unsigned int tileX = c * TILE_SIZE;
+    unsigned int tileY = (self.frame.size.height - TILE_SIZE) -  r * TILE_SIZE;
     NSAssert(tileX + TILE_SIZE <= self.frame.size.width, @"Illegal width");
     NSAssert(tileY + TILE_SIZE <= self.frame.size.height, @"Illegal height");
 
     POWTileView *newTileView = [[POWTileView alloc]
                                 initWithFrame:CGRectMake(tileX, tileY, TILE_SIZE, TILE_SIZE)];
-    newTileView.number = number;
+    newTileView.tile = tile;
     [self addSubview:newTileView];
 }
 

@@ -8,14 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    kPowTileTypeNone,
+    kPOWTileTypeRegular,
+    kPowTileTypeBlock,
+    kPowTileTypeBeam
+} POWTileType;
+
 @interface POWTile : NSObject
 
+@property (nonatomic) POWTileType type;
+
+// Only valid if type == kPOWTileTypeRegular
 @property (nonatomic) unsigned int value;
 
 // Returns an empty tile.
 + (POWTile *)zeroTile;
++ (POWTile *)randomTile;
 
-// Returns a random new tile number.
-+ (unsigned int)getRandomNewTileNumber;
+// Returns true if this tile can be collapsed with the passed tile if opportunity is given.
+- (BOOL)canBeCollapsedWithTile:(POWTile *)tile;
 
 @end

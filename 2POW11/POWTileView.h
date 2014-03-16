@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "POWTile.h"
+
 @interface POWTileView : UIView
 
-@property (nonatomic) unsigned int number;
+@property (nonatomic, strong) POWTile *tile;
 
 @end

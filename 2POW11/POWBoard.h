@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "POWTile.h"
+
 @interface POWBoard : NSObject
 
 - (void)resetBoard;
@@ -15,14 +17,14 @@
 // Returns true if there are available moves.
 - (BOOL)hasAvailableMoves;
 
-// Returns YES if a tile with the given value can be placed in the given column
-// or no otherwise. Consider calling this before -insertTileWithValue.
-- (BOOL)canPlaceTileAtColumn:(unsigned int)c withValue:(int)value;
+// Returns YES if a tile with the given tile can be placed in the given column
+// or no otherwise. Consider calling this before -insertTile.
+- (BOOL)canPlaceTile:(POWTile *)tile atColumn:(unsigned int)c;
 
-// Inserts a tile with the given value to the given column. Will crash if trying
-// to insert a value to a column that is already full.
+// Inserts a tile to the given column. Will crash if trying
+// to insert a tile to a column that is already full.
 // Returns accumulated score.
-- (unsigned int)insertTileWithValue:(unsigned int)value toColumn:(unsigned int)c;
+- (unsigned int)insertTile:(POWTile *)tile toColumn:(unsigned int)c;
 
 // Moves all tiles to the left, collapsing if two tiles with the same number get in
 // touch with each other.
@@ -38,8 +40,8 @@
 // Returns accumulated score.
 - (unsigned int)collapseTilesDownwards;
 
-// Returns the current value at the specified position.
-// Returns 0 if there is no tile at the specified position.
-- (unsigned int)valueForTileAtRow:(unsigned int)r column:(unsigned int)c;
+// Returns the current tile at the specified position.
+// Returns nil if there is no tile at the specified position.
+- (POWTile *)tileAtRow:(unsigned int)r column:(unsigned int)c;
 
 @end

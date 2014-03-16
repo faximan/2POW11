@@ -9,7 +9,6 @@
 #import "POWTileHeadView.h"
 
 #import "POWConstants.h"
-#import "POWTile.h"
 #import "POWTileView.h"
 
 @interface POWTileHeadView() {
@@ -25,8 +24,8 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super initWithCoder:aDecoder]) {
-        self.headTile = [[POWTileView alloc] initWithFrame:CGRectMake(0, 0, TILE_SIZE, TILE_SIZE)];
-        [self newTile];
+        self.headTile = [[POWTileView alloc]
+                         initWithFrame:CGRectMake(0, 0, TILE_SIZE, TILE_SIZE)];
     }
     return self;
 }
@@ -69,9 +68,9 @@
                                                  repeats:YES];
 }
 
-- (void)newTile {
+- (void)addTile:(POWTile *)tile {
     [self.headTile removeFromSuperview];
-    self.headTile.number = [POWTile getRandomNewTileNumber];
+    self.headTile.tile = tile;
 
     [self updateIllegalColumns];
     self.tilePosition = [self firstAvailableColumn];
@@ -83,12 +82,12 @@
     return self.tilePosition;
 }
 
-- (unsigned int)currentValue {
-    return self.headTile.number;
+- (POWTile *)currentTile {
+    return self.headTile.tile;
 }
 
 - (void)updateIllegalColumns {
-    NSArray *illegalColumns = [self.delegate illegalColumnsForValue:[self currentValue]];
+    NSArray *illegalColumns = [self.delegate illegalColumnsForTile:[self currentTile]];
 
     // Reset columns
     for (int i = 0; i < BOARD_WIDTH; i++) {

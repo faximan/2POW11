@@ -19,6 +19,11 @@
 // Time in seconds for the head tile to move to the next position.
 #define MOVE_SPEED 0.5
 
+// Probability to get different kinds of tiles. These should sum up to 1.0
+#define TILE_TYPE_REGULAR_PROB 0.4
+#define TILE_TYPE_BLOCK_PROB  0.3
+#define TILE_TYPE_BEAM_PROB  0.3
+
 // Google AdMob publisher id.
 #define GoogleAdsPublisherID @"ca-app-pub-2033561029327939/9394333208"
 

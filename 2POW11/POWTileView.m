@@ -27,10 +27,27 @@
     return self;
 }
 
-- (void)setNumber:(unsigned int)number {
-    _number = number;
-    self.numberLabel.text = [NSString stringWithFormat:@"%u", self.number];
-    self.backgroundColor = [POWColorPicker colorForNumber:self.number];
+- (void)setTile:(POWTile *)tile {
+    _tile = tile;
+    switch (tile.type) {
+        case kPOWTileTypeRegular:
+            self.numberLabel.text = [NSString stringWithFormat:@"%u", tile.value];
+            self.backgroundColor = [POWColorPicker colorForNumber:tile.value];
+            break;
+        case kPowTileTypeBlock:
+            self.backgroundColor = [UIColor blackColor];
+            self.numberLabel.text = @"";
+            break;
+        case kPowTileTypeBeam:
+            self.backgroundColor = [UIColor redColor];
+            self.numberLabel.text = @"";
+            break;
+        default:
+            NSAssert(0, @"Illegal enum");
+            break;
+    }
+
+
 }
 
 @end
