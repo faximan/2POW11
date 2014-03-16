@@ -191,9 +191,9 @@ void swapTileValues(unsigned int* a, unsigned int* b) {
     *b = temp;
 }
 - (void)rotateTileMatrix180Degrees {
-    for (int r = 0; r < (BOARD_HEIGHT + 1) / 2; r++) {
+    for (int r = 0; r < BOARD_HEIGHT / 2; r++) {
         for (int c = 0; c < BOARD_WIDTH; c++) {
-            swapTileValues(&m_tiles[r][c], &m_tiles[BOARD_HEIGHT - r][BOARD_WIDTH - 1 - c]);
+            swapTileValues(&m_tiles[r][c], &m_tiles[BOARD_HEIGHT - 1 - r][BOARD_WIDTH - 1 - c]);
         }
     }
 }

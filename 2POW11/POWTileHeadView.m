@@ -13,7 +13,7 @@
 #define MOVE_SPEED 0.5 // Time in seconds for the head tile to move to the next position.
 
 @interface POWTileHeadView() {
-    int m_columns_to_skip[BOARD_WIDTH];
+    BOOL m_columns_to_skip[BOARD_WIDTH];
 }
 
 @property (nonatomic) int tilePosition;  // Current x position for head tile.
@@ -54,7 +54,7 @@
 
     do{
         self.tilePosition = (self.tilePosition + 1) % BOARD_WIDTH;
-    } while (m_columns_to_skip[self.tilePosition] != 0);
+    } while (m_columns_to_skip[self.tilePosition]);
 }
 
 - (void)resetTimer {
@@ -92,11 +92,11 @@
 
     // Reset columns
     for (int i = 0; i < BOARD_WIDTH; i++) {
-        m_columns_to_skip[i] = 0;
+        m_columns_to_skip[i] = NO;
     }
 
     for (NSNumber *illegalColumn in illegalColumns) {
-        m_columns_to_skip[[illegalColumn intValue]] = 1;
+        m_columns_to_skip[[illegalColumn intValue]] = YES;
     }
 
     // Move tile if this column is not legal.
@@ -110,9 +110,9 @@
 }
 
 - (int)firstAvailableColumn {
-    for (int i = 0; i < BOARD_WIDTH; i++) {
-        if (m_columns_to_skip[i] == 0) {
-            return i;
+    for (int c = 0; c < BOARD_WIDTH; c++) {
+        if (!m_columns_to_skip[c]) {
+            return c;
         }
     }
     return -1;  // No available columns.
