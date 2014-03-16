@@ -34,11 +34,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yDN-7Z-HtD">
-                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.054901964962482452" green="0.89019614458084106" blue="0.14117647707462311" alpha="1" colorSpace="deviceRGB"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.93119480298913038" green="0.93119480298913038" blue="0.93119480298913038" alpha="1" colorSpace="calibratedRGB"/>
                     </view>

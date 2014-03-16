@@ -1,0 +1,5 @@
+#include "Pods-LARSAdController.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/LARSAdController" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/Google-Mobile-Ads-SDK" "${PODS_ROOT}/Headers/LARSAdController"
+OTHER_LDFLAGS = -ObjC ${PODS_LARSADCONTROLLER_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}

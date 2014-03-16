@@ -8,11 +8,18 @@
 
 #import "POWAppDelegate.h"
 
+#import <LARSAdController/LARSAdController.h>
+#import <LARSAdController/TOLAdAdapteriAds.h>
+#import <LARSAdController/TOLAdAdapterGoogleAds.h>
+
+#define GoogleAdsPublisherID @"ca-app-pub-2033561029327939/9394333208"
+
 @implementation POWAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapteriAds class]];
+    [[LARSAdController sharedManager] registerAdClass:[TOLAdAdapterGoogleAds class] withPublisherId:GoogleAdsPublisherID];
     return YES;
 }
 							

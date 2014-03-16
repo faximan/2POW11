@@ -11,6 +11,8 @@
 #import "POWColorPicker.h"
 #import "POWTileView.h"
 
+#import <LARSAdController/LARSAdController.h>
+
 @interface POWViewController() {
     // Tile matrix. (0,0) is lower left corner.
     unsigned int m_tiles[BOARD_HEIGHT+1][BOARD_WIDTH];  // +1 to accomodate for extra tile on top that can be collapsed downwards.
@@ -26,6 +28,15 @@
     self.bodyTileView.delegate = self;
     self.headTileView.delegate = self;
     [self newGame];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
+    // Setup ad view controller.
+    [[LARSAdController sharedManager] setPresentationType:LARSAdControllerPresentationTypeBottom];
+    [[LARSAdController sharedManager] setPinningLocation:LARSAdControllerPinLocationBottom];
+    [[LARSAdController sharedManager] addAdContainerToViewInViewController:self];
 }
 
 // Starts a new game

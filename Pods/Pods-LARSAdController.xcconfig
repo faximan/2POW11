@@ -1,0 +1,1 @@
+PODS_LARSADCONTROLLER_OTHER_LDFLAGS = -framework AudioToolbox -framework CoreGraphics -framework MessageUI -framework StoreKit -framework SystemConfiguration -framework iAd -weak_framework AdSupport
